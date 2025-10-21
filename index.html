@@ -1,12 +1,28 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DB Systematics Prototype</title>
+  <meta charset="utf-8">
+  <title>CoreSynq Prototype</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>Welcome to DB Systematics</h1>
-  <p>Your AI-based system is under construction.</p>
+  <header><h1>CoreSynq (Prototype)</h1></header>
+  <main>
+    <section id="brain-screen">
+      <div id="ai-brain"></div>
+      <div id="tool-panel">
+        <div class="ai-tool" draggable="true" id="tool1">T1</div>
+        <div class="ai-tool" draggable="true" id="tool2">T2</div>
+        <div class="ai-tool" draggable="true" id="tool3">T3</div>
+      </div>
+      <div id="controls">
+        <button id="test-btn">Test</button>
+        <button id="finalize-btn">Finalize</button>
+      </div>
+      <div id="output"></div>
+    </section>
+  </main>
+  <script src="js/main.js"></script>
 </body>
 </html>
