@@ -1,26 +1,48 @@
-// === Day 7: Client Management System ===
+// === DASHBOARD MAIN SCRIPT (Day 7–8 Combined) ===
 
+// --- CLIENT SYSTEM ---
 let clients = [
   { id: 'c1', name: 'Acme', desc: 'Automates marketing', profit: 0 },
   { id: 'c2', name: 'BetaCo', desc: 'Streamlines sales', profit: 0 }
 ];
-
 localStorage.setItem('clients', JSON.stringify(clients));
 
-const clientSection = document.getElementById('clients');
-if (clientSection) {
-  clients.forEach(client => {
-    if (!document.querySelector(`.client[data-id="${client.id}"]`)) {
-      const div = document.createElement('div');
-      div.className = 'client';
-      div.dataset.id = client.id;
-      div.innerHTML = `
-        <img src="assets/logos/${client.id}.png" alt="${client.name} logo">
-        <h3>${client.name}</h3>
-        <p class="desc">${client.desc}</p>
-        <p class="profit">$${client.profit} this quarter</p>
-      `;
-      clientSection.appendChild(div);
-    }
+// --- SOP (STANDARD OPERATING PROCEDURE) SYSTEM ---
+let sops = [
+  { title: "Caller Script", steps: ["Step1", "Step2"], status: "Draft" },
+  { title: "Demo Guide", steps: ["Step1", "Step2"], status: "Draft" }
+];
+localStorage.setItem('sops', JSON.stringify(sops));
+
+// --- PAYMENT SYSTEM ---
+function recordPayment(clientId, amount) {
+  const payments = JSON.parse(localStorage.getItem('payments') || '[]');
+  payments.push({
+    id: 'p' + Date.now(),
+    client: clientId,
+    amount,
+    ts: new Date().toISOString()
   });
+  localStorage.setItem('payments', JSON.stringify(payments));
 }
+
+// --- DASHBOARD INITIALIZATION ---
+document.addEventListener('DOMContentLoaded', () => {
+  const clientSection = document.getElementById('clients');
+  const storedClients = JSON.parse(localStorage.getItem('clients')) || [];
+  const storedSops = JSON.parse(localStorage.getItem('sops')) || [];
+
+  // Render Clients
+  clientSection.innerHTML = storedClients.map(c => `
+    <div class="client" data-id="${c.id}">
+      <img src="assets/logos/${c.id}.png" alt="logo">
+      <h3>${c.name}</h3>
+      <p class="desc">${c.desc}</p>
+      <p class="profit">$${c.profit} this quarter</p>
+    </div>
+  `).join('');
+
+  // Log SOPs
+  console.log("Loaded SOPs:", storedSops);
+  console.log("Dashboard Initialized Successfully");
+});
