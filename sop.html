@@ -2,9 +2,169 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Page</title>
+  <title>CoreSynq SOP Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* === CoreSynq SOP Manager Styles === */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top, #0a0f1a, #000);
+      color: #e0f7ff;
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(0, 212, 255, 0.08);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      color: #00d4ff;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    #sop-list {
+      width: 90%;
+      max-width: 800px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.15);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+    }
+
+    .sop-item {
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      transition: 0.3s;
+    }
+
+    .sop-item:hover {
+      background: rgba(0, 212, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .sop-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .sop-header h3 {
+      margin: 0;
+      color: #00d4ff;
+    }
+
+    .sop-status {
+      background: #00d4ff;
+      color: #000;
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    .sop-steps {
+      margin: 0.5rem 0 0;
+      padding-left: 1.2rem;
+    }
+
+    button {
+      background: linear-gradient(90deg, #00d4ff, #0077ff);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.7rem 1.4rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+      margin-top: 1rem;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 18px rgba(0, 212, 255, 0.5);
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Coming Soon</h1>
+  <header>
+    <h1>🧩 CoreSynq SOP Manager</h1>
+  </header>
+
+  <main>
+    <h2>Your Standard Operating Procedures</h2>
+    <section id="sop-list">
+      <!-- SOP items will load here dynamically -->
+      <p>Loading your SOPs...</p>
+    </section>
+    <button id="add-sop">➕ Add New SOP</button>
+  </main>
+
+  <script>
+    // === SOP PAGE SCRIPT ===
+    document.addEventListener('DOMContentLoaded', () => {
+      const sopList = document.getElementById('sop-list');
+      let sops = JSON.parse(localStorage.getItem('sops')) || [];
+
+      function renderSOPs() {
+        if (sops.length === 0) {
+          sopList.innerHTML = '<p>No SOPs found. Click "Add New SOP" to create one.</p>';
+          return;
+        }
+
+        sopList.innerHTML = sops.map(sop => `
+          <div class="sop-item">
+            <div class="sop-header">
+              <h3>${sop.title}</h3>
+              <span class="sop-status">${sop.status}</span>
+            </div>
+            <ul class="sop-steps">
+              ${sop.steps.map(step => `<li>${step}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('');
+      }
+
+      document.getElementById('add-sop').addEventListener('click', () => {
+        const title = prompt('Enter SOP title:');
+        if (!title) return;
+
+        const steps = [];
+        let adding = true;
+        while (adding) {
+          const step = prompt('Enter step (leave blank to finish):');
+          if (!step) adding = false;
+          else steps.push(step);
+        }
+
+        sops.push({ title, steps, status: 'Draft' });
+        localStorage.setItem('sops', JSON.stringify(sops));
+        renderSOPs();
+      });
+
+      renderSOPs();
+    });
+  </script>
 </body>
 </html>
