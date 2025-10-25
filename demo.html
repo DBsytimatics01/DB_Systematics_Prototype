@@ -2,9 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Page</title>
+  <title>CoreSynq Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>Coming Soon</h1>
+  <header>
+    <h1>CoreSynq Live Demo</h1>
+    <p>Preview how client systems and SOPs run in real time.</p>
+  </header>
+
+  <main>
+    <section id="demo-section">
+      <h2>Client Simulation</h2>
+      <div id="demo-clients"></div>
+    </section>
+
+    <section id="demo-sops">
+      <h2>Standard Operating Procedures</h2>
+      <ul id="sop-list"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 CoreSynq — AI Business Systems</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const clients = JSON.parse(localStorage.getItem('clients')) || [];
+      const sops = JSON.parse(localStorage.getItem('sops')) || [];
+
+      // Render clients
+      const clientDiv = document.getElementById("demo-clients");
+      if (clients.length === 0) {
+        clientDiv.innerHTML = "<p>No clients found. Add them in the dashboard.</p>";
+      } else {
+        clientDiv.innerHTML = clients.map(c => `
+          <div class="client">
+            <img src="assets/logos/${c.id}.png" alt="${c.name}">
+            <h3>${c.name}</h3>
+            <p>${c.desc}</p>
+            <p><strong>Profit:</strong> $${c.profit}</p>
+          </div>
+        `).join('');
+      }
+
+      // Render SOPs
+      const sopList = document.getElementById("sop-list");
+      sopList.innerHTML = sops.map(s => `
+        <li><strong>${s.title}</strong> — ${s.status}</li>
+      `).join('');
+    });
+  </script>
 </body>
 </html>
