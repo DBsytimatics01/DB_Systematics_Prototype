@@ -3,30 +3,172 @@
 <head>
   <meta charset="utf-8">
   <title>CoreSynq Prototype</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ✅ Main Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* === CoreSynq Prototype Visual Upgrade === */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top, #0a0f1a, #000);
+      color: #e0f7ff;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(0, 212, 255, 0.08);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      color: #00d4ff;
+    }
+
+    main {
+      display: flex;
+      height: calc(100vh - 80px);
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 0 2rem;
+      position: relative;
+    }
+
+    #brain-screen {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #ai-brain {
+      width: 400px;
+      height: 400px;
+      border: 2px dashed #00d4ff;
+      border-radius: 50%;
+      margin-top: 40px;
+      position: relative;
+      transition: 0.4s;
+      box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
+    }
+
+    #ai-brain:hover {
+      box-shadow: 0 0 40px rgba(0, 212, 255, 0.4);
+    }
+
+    #tool-panel {
+      width: 200px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      border-left: 1px solid rgba(0, 212, 255, 0.2);
+      background: rgba(0, 212, 255, 0.05);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+    }
+
+    .ai-tool {
+      background: rgba(0, 212, 255, 0.15);
+      border: 1px solid rgba(0, 212, 255, 0.4);
+      padding: 0.7rem;
+      border-radius: 10px;
+      cursor: grab;
+      text-align: center;
+      font-weight: 600;
+      transition: 0.3s;
+      color: #e0f7ff;
+    }
+
+    .ai-tool:hover {
+      background: rgba(0, 212, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    #controls {
+      display: flex;
+      gap: 1rem;
+      margin-top: 20px;
+    }
+
+    button {
+      background: linear-gradient(90deg, #00d4ff, #0077ff);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.7rem 1.4rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 18px rgba(0, 212, 255, 0.5);
+    }
+
+    #output {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      width: 400px;
+      height: 120px;
+      margin-top: 30px;
+      border-radius: 10px;
+      padding: 0.5rem;
+      overflow-y: auto;
+      font-family: monospace;
+    }
+
+    #links {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  </style>
 </head>
+
 <body>
-  <header><h1>CoreSynq (Prototype)</h1></header>
+  <header>
+    <h1>🧠 CoreSynq Prototype</h1>
+  </header>
+
   <main>
+    <!-- === TOOL PANEL === -->
+    <aside id="tool-panel">
+      <h3>AI Tools</h3>
+      <div class="ai-tool" draggable="true" id="tool1">Marketing Bot</div>
+      <div class="ai-tool" draggable="true" id="tool2">Sales AI</div>
+      <div class="ai-tool" draggable="true" id="tool3">Client Assistant</div>
+    </aside>
+
+    <!-- === AI BRAIN AREA === -->
     <section id="brain-screen">
       <div id="ai-brain"></div>
-      <div id="tool-panel">
-        <div class="ai-tool" draggable="true" id="tool1">T1</div>
-        <div class="ai-tool" draggable="true" id="tool2">T2</div>
-        <div class="ai-tool" draggable="true" id="tool3">T3</div>
-      </div>
+
       <div id="controls">
-        <button id="test-btn">Test</button>
-        <button id="finalize-btn">Finalize</button>
+        <button id="test-btn">Run Simulation</button>
+        <button id="finalize-btn">Finalize System</button>
       </div>
+
       <div id="output"></div>
     </section>
   </main>
-  <script src="js/main.js"></script>
-<svg id="links" style="position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;"></svg>
 
-<script src="js/main.js"></script>
+  <svg id="links"></svg>
+  <script src="js/main.js"></script>
 </body>
-</html></body>
 </html>
