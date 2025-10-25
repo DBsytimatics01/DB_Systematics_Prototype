@@ -1,48 +1,80 @@
-// === DASHBOARD MAIN SCRIPT (Day 7–8 Combined) ===
+// === DASHBOARD MAIN SCRIPT (Days 7–10 Combined) ===
+// Handles client display, SOPs, payments, and dashboard logic.
 
 // --- CLIENT SYSTEM ---
 let clients = [
   { id: 'c1', name: 'Acme', desc: 'Automates marketing', profit: 0 },
   { id: 'c2', name: 'BetaCo', desc: 'Streamlines sales', profit: 0 }
 ];
-localStorage.setItem('clients', JSON.stringify(clients));
+if (!localStorage.getItem('clients')) {
+  localStorage.setItem('clients', JSON.stringify(clients));
+}
 
 // --- SOP (STANDARD OPERATING PROCEDURE) SYSTEM ---
 let sops = [
-  { title: "Caller Script", steps: ["Step1", "Step2"], status: "Draft" },
-  { title: "Demo Guide", steps: ["Step1", "Step2"], status: "Draft" }
+  { title: "Caller Script", steps: ["Step 1", "Step 2"], status: "Draft" },
+  { title: "Demo Guide", steps: ["Step 1", "Step 2"], status: "Draft" }
 ];
-localStorage.setItem('sops', JSON.stringify(sops));
+if (!localStorage.getItem('sops')) {
+  localStorage.setItem('sops', JSON.stringify(sops));
+}
 
 // --- PAYMENT SYSTEM ---
 function recordPayment(clientId, amount) {
-  const payments = JSON.parse(localStorage.getItem('payments') || '[]');
-  payments.push({
-    id: 'p' + Date.now(),
-    client: clientId,
-    amount,
-    ts: new Date().toISOString()
-  });
-  localStorage.setItem('payments', JSON.stringify(payments));
+  try {
+    const payments = JSON.parse(localStorage.getItem('payments') || '[]');
+    payments.push({
+      id: 'p' + Date.now(),
+      client: clientId,
+      amount: parseFloat(amount),
+      ts: new Date().toISOString()
+    });
+    localStorage.setItem('payments', JSON.stringify(payments));
+
+    // Update client profit
+    const clients = JSON.parse(localStorage.getItem('clients'));
+    const client = clients.find(c => c.id === clientId);
+    if (client) {
+      client.profit += parseFloat(amount);
+      localStorage.setItem('clients', JSON.stringify(clients));
+      renderClients();
+    }
+  } catch (err) {
+    console.error("Error recording payment:", err);
+  }
 }
 
-// --- DASHBOARD INITIALIZATION ---
-document.addEventListener('DOMContentLoaded', () => {
+// --- RENDER CLIENTS ---
+function renderClients() {
   const clientSection = document.getElementById('clients');
   const storedClients = JSON.parse(localStorage.getItem('clients')) || [];
-  const storedSops = JSON.parse(localStorage.getItem('sops')) || [];
+  if (!clientSection) return;
 
-  // Render Clients
   clientSection.innerHTML = storedClients.map(c => `
     <div class="client" data-id="${c.id}">
-      <img src="assets/logos/${c.id}.png" alt="logo">
+      <img src="assets/logos/${c.id}.png" alt="${c.name} Logo">
       <h3>${c.name}</h3>
       <p class="desc">${c.desc}</p>
-      <p class="profit">$${c.profit} this quarter</p>
+      <p class="profit">$${c.profit.toLocaleString()} this quarter</p>
+      <button class="pay-btn" data-id="${c.id}">+ Payment</button>
     </div>
   `).join('');
 
-  // Log SOPs
-  console.log("Loaded SOPs:", storedSops);
-  console.log("Dashboard Initialized Successfully");
+  // Attach pay button events
+  document.querySelectorAll('.pay-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      const amount = prompt(`Enter payment amount for ${id}:`);
+      if (amount && !isNaN(amount)) {
+        recordPayment(id, amount);
+        alert(`Payment of $${amount} recorded for ${id}`);
+      }
+    });
+  });
+}
+
+// --- INITIALIZE DASHBOARD ---
+document.addEventListener('DOMContentLoaded', () => {
+  renderClients();
+  console.log("CoreSynq Dashboard Initialized Successfully ✅");
 });
