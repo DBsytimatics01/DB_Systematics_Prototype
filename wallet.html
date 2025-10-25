@@ -2,9 +2,159 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Page</title>
+  <title>CoreSynq Wallet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* === CoreSynq Wallet Styles === */
+    body {
+      background: radial-gradient(circle at top, #0a0f1a, #000);
+      color: #e0f7ff;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(0, 212, 255, 0.08);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+      width: 100%;
+    }
+
+    header h1 {
+      color: #00d4ff;
+      font-size: 1.8rem;
+    }
+
+    main {
+      margin-top: 2rem;
+      width: 90%;
+      max-width: 800px;
+      text-align: center;
+    }
+
+    #wallet-balance {
+      font-size: 2.2rem;
+      color: #00ffb0;
+      font-weight: 700;
+      margin: 1rem 0 1.5rem;
+    }
+
+    #payment-history {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: left;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .payment-item {
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.15);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 0.7rem;
+    }
+
+    .payment-item span {
+      display: block;
+      font-size: 0.9rem;
+      color: #a8e9ff;
+    }
+
+    button {
+      background: linear-gradient(90deg, #00d4ff, #0077ff);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.7rem 1.4rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+      margin-top: 1rem;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 18px rgba(0, 212, 255, 0.5);
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Coming Soon</h1>
+  <header>
+    <h1>💳 CoreSynq Wallet</h1>
+  </header>
+
+  <main>
+    <h2>Your Balance</h2>
+    <div id="wallet-balance">$0.00</div>
+
+    <button id="add-payment">➕ Add Test Payment</button>
+
+    <h2 style="margin-top:2rem;">Recent Transactions</h2>
+    <section id="payment-history">
+      <p>No transactions yet.</p>
+    </section>
+  </main>
+
+  <script>
+    // === CoreSynq Wallet Logic ===
+    document.addEventListener('DOMContentLoaded', () => {
+      const balanceEl = document.getElementById('wallet-balance');
+      const historyEl = document.getElementById('payment-history');
+
+      let payments = JSON.parse(localStorage.getItem('payments')) || [];
+
+      function renderWallet() {
+        const total = payments.reduce((sum, p) => sum + p.amount, 0);
+        balanceEl.textContent = `$${total.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+
+        if (payments.length === 0) {
+          historyEl.innerHTML = '<p>No transactions yet.</p>';
+          return;
+        }
+
+        historyEl.innerHTML = payments
+          .map(p => `
+            <div class="payment-item">
+              <strong>${p.client}</strong> paid <b>$${p.amount}</b>
+              <span>${new Date(p.ts).toLocaleString()}</span>
+            </div>
+          `)
+          .reverse()
+          .join('');
+      }
+
+      // --- Add Test Payment Button ---
+      document.getElementById('add-payment').addEventListener('click', () => {
+        const client = prompt('Enter client name (e.g., Acme):') || 'TestClient';
+        const amount = parseFloat(prompt('Enter payment amount:')) || 0;
+        if (amount <= 0) return alert('Invalid amount.');
+
+        const payment = {
+          id: 'p' + Date.now(),
+          client,
+          amount,
+          ts: new Date().toISOString()
+        };
+
+        payments.push(payment);
+        localStorage.setItem('payments', JSON.stringify(payments));
+        renderWallet();
+      });
+
+      renderWallet();
+    });
+  </script>
 </body>
 </html>
