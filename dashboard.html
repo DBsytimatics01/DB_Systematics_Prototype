@@ -2,24 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Client Dashboard</title>
+  <title>CoreSynq Dashboard</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header><h1>Client Dashboard</h1></header>
+  <header>
+    <h1>CoreSynq Client Dashboard</h1>
+  </header>
 
-  <main>
-    <section id="clients">
-      <div class="client" data-id="c1">
-        <img src="assets/logos/c1.png" alt="logo">
-        <h3>Acme</h3>
-        <p class="desc">One-line about system</p>
-        <p class="profit">$0 this quarter</p>
-      </div>
-    </section>
+  <main id="brain-screen">
+    <!-- Central AI Brain -->
+    <div id="ai-brain"></div>
+
+    <!-- SVG connection lines (auto-generated in JS) -->
+    <svg id="links"></svg>
+
+    <!-- Tool panel -->
+    <div id="tool-panel">
+      <div class="ai-tool" id="tool1">CRM</div>
+      <div class="ai-tool" id="tool2">Sales</div>
+      <div class="ai-tool" id="tool3">Leads</div>
+      <div class="ai-tool" id="tool4">Data</div>
+      <div class="ai-tool" id="tool5">Reports</div>
+    </div>
+
+    <!-- Simulation + finalize buttons -->
+    <div id="controls">
+      <button id="test-btn">Run Simulation</button>
+      <button id="finalize-btn">Finalize Layout</button>
+    </div>
+
+    <!-- Output results -->
+    <div id="output"></div>
   </main>
 
-  <script src="js/dashboard.js"></script>
+  <section id="clients">
+    <h2>Active Clients</h2>
+    <div class="client" data-id="c1">
+      <img src="assets/logos/c1.png" alt="Acme Logo">
+      <h3>Acme</h3>
+      <p class="desc">Automates marketing workflows</p>
+      <p class="profit">$0 this quarter</p>
+    </div>
+    <div class="client" data-id="c2">
+      <img src="assets/logos/c2.png" alt="BetaCo Logo">
+      <h3>BetaCo</h3>
+      <p class="desc">Streamlines sales outreach</p>
+      <p class="profit">$0 this quarter</p>
+    </div>
+  </section>
+
+  <!-- Main JS connection -->
+  <script src="js/main.js"></script>
 </body>
 </html>
