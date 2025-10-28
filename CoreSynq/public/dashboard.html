@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoreSynq Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <img src="../assets/logos/coresynq-logo.png" class="logo" alt="CoreSynq">
+    <h2>Automation Dashboard</h2>
+  </header>
 
+  <main>
+    <section id="stats">
+      <h3>System Overview</h3>
+      <p id="clientCount">Clients: 0</p>
+      <p id="taskCount">Tasks Automated: 0</p>
+    </section>
+
+    <section id="controls">
+      <button onclick="addClient()">Add Client</button>
+      <button onclick="runAutomation()">Run Automation</button>
+    </section>
+  </main>
+
+  <footer>
+    <button onclick="window.location.href='index.html'">Home</button>
+    <button onclick="window.location.href='sop.html'">SOP</button>
+    <button onclick="window.location.href='wallet.html'">Wallet</button>
+  </footer>
+
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>
