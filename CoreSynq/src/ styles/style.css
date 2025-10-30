@@ -1,1 +1,33 @@
+body {
+  background: #0d0d0d;
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
+h1, h2, h3 {
+  color: #00e0ff;
+}
+
+.client-card, .tool-palette, .wallet-page, .dashboard-page {
+  background: #111;
+  padding: 20px;
+  border-radius: 16px;
+  margin: 20px;
+  box-shadow: 0 0 12px rgba(0, 224, 255, 0.3);
+}
+
+button {
+  background: #00e0ff;
+  color: #000;
+  border: none;
+  border-radius: 10px; no
+  padding: 10px 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #009bb8;
+}
