@@ -1,21 +1,31 @@
-// functions/stripe_webhook.js (pseudocode)
-const functions = require('firebase-functions');
-const stripe = require('stripe')(functions.config().stripe.secret);
-const admin = require('firebase-admin');
+import Stripe from "stripe";
+import express from "express";
 
-exports.stripeWebhook = functions.https.onRequest(async (req,res)=>{
-  const sig = req.headers['stripe-signature'];
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const app = express();
+
+app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
+  const sig = req.headers["stripe-signature"];
   let event;
+
   try {
-    event = stripe.webhooks.constructEvent(req.rawBody, sig, functions.config().stripe.endpoint_secret);
-  } catch(e) { return res.status(400).send(`Webhook Error: ${e.message}`); }
-  if(event.type === 'checkout.session.completed'){
-    const session = event.data.object;
-    const walletId = session.metadata.walletId;
-    // create transaction doc in Firestore (pending) and then mark completed after settlement logic
-    await admin.firestore().collection('transactions').add({
-      walletId, amount: session.amount_total, status: 'completed', source: 'stripe', createdAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    console.error("Webhook signature failed.", err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
-  res.json({received:true});
+
+  // Handle events (like successful payments)
+  if (event.type === "payment_intent.succeeded") {
+    const payment = event.data.object;
+    console.log("Payment succeeded:", payment.id);
+  }
+
+  res.send();
 });
+
+export default app;
