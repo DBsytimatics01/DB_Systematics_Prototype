@@ -1,11 +1,21 @@
-// functions/index.js
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-admin.initializeApp();
+import functions from "firebase-functions";
+import express from "express";
+import cors from "cors";
+import stripeApp from "./stripe_webhook.js";
+import apiRoutes from "./api.js";
 
-// simple HTTP function for health
-exports.hello = functions.https.onRequest((req,res)=>{
-  res.status(200).send("CoreSynq functions healthy");
+const app = express();
+app.use(cors({ origin: true }));
+app.use(express.json());
+
+// Mount backend routes
+app.use("/api", apiRoutes);
+app.use("/stripe", stripeApp);
+
+// Root route
+app.get("/", (req, res) => {
+  res.send("🔥 CoreSynq backend online");
 });
 
-// placeholder: create checkout session route will go here later (server side)
+// Export the Express app as a Firebase Function
+export const coreSynqAPI = functions.https.onRequest(app);
